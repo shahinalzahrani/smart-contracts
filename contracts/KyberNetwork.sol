@@ -43,8 +43,6 @@ contract KyberNetwork is Withdrawable, Utils2, KyberNetworkInterface, Reentrancy
     uint  public constant PERM_HINT_GET_RATE = 1 << 255; // for get rate. bit mask hint.
 
     uint public negligibleRateDiff = 10; // basic rate steps will be in 0.01%
-    KyberReserveInterface[] public reserves;
-    mapping(address=>ReserveType) public reserveType;
     WhiteListInterface public whiteListContract;
     ExpectedRateInterface public expectedRateContract;
     FeeBurnerInterface    public feeBurnerContract;
@@ -53,6 +51,9 @@ contract KyberNetwork is Withdrawable, Utils2, KyberNetworkInterface, Reentrancy
     bool                  public isEnabled = false; // network is enabled
     mapping(bytes32=>uint) public infoFields; // this is only a UI field for external app.
 
+    KyberReserveInterface[] public reserves;
+    mapping(address=>ReserveType) public reserveType;
+    mapping(bytes3=>address) public reserveAddress;
     mapping(address=>address[]) public reservesPerTokenSrc; //reserves supporting token to eth
     mapping(address=>address[]) public reservesPerTokenDest;//reserves support eth to token
 
@@ -134,6 +135,7 @@ contract KyberNetwork is Withdrawable, Utils2, KyberNetworkInterface, Reentrancy
         reserves.push(reserve);
 
         reserveType[reserve] = isPermissionless ? ReserveType.PERMISSIONLESS : ReserveType.PERMISSIONED;
+        reserveAddress[bytes3(address(reserve))] = address(reserve);
 
         AddReserveToNetwork(reserve, true, isPermissionless);
 
@@ -156,6 +158,8 @@ contract KyberNetwork is Withdrawable, Utils2, KyberNetworkInterface, Reentrancy
         reserveType[reserve] = ReserveType.NONE;
         reserves[index] = reserves[reserves.length - 1];
         reserves.length--;
+
+        reserveAddress[bytes3(address(reserve))] = address(0);
 
         RemoveReserveFromNetwork(reserve);
 
