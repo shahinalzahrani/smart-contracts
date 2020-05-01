@@ -1,0 +1,20 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.14.1
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-LODASH-567746:
+    - solium > lodash:
+        patched: '2020-05-01T01:34:58.038Z'
+    - solhint > eslint > lodash:
+        patched: '2020-05-01T01:34:58.038Z'
+    - truffle-flattener > truffle-config > lodash:
+        patched: '2020-05-01T01:34:58.038Z'
+    - solhint > eslint > inquirer > lodash:
+        patched: '2020-05-01T01:34:58.038Z'
+    - truffle-flattener > truffle-resolver > async > lodash:
+        patched: '2020-05-01T01:34:58.038Z'
+    - solhint > lodash:
+        patched: '2020-05-01T01:34:58.038Z'
+    - solhint > eslint > table > lodash:
+        patched: '2020-05-01T01:34:58.038Z'
